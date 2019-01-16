@@ -10,6 +10,13 @@ buildscript {
 	}
 }
 
+configurations {
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
+	}
+}
+
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
@@ -29,4 +36,5 @@ dependencies {
 	implementation 'org.springframework.session:spring-session-core'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
 }
