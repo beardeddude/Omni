@@ -1,5 +1,6 @@
 package com.omni.omni.service.security;
 
+import com.omni.omni.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -11,6 +12,13 @@ import java.util.Collections;
 @Service
 public class AuthenticationService implements AuthenticationProvider {
 
+    private final UserRepository userRepository;
+
+    public AuthenticationService(UserRepository userRepository) {
+
+        this.userRepository = userRepository;
+    }
+    
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
