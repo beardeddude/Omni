@@ -18,6 +18,7 @@ configurations {
 
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'java'
+apply plugin: 'idea'
 
 group = 'com.omni'
 version = '0.0.1-SNAPSHOT'
@@ -31,8 +32,16 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.jsoup:jsoup:1.11.3'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
 }
 
 node {

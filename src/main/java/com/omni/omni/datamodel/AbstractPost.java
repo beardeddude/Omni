@@ -6,10 +6,16 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.util.Date;
 
-public abstract class AbstractPost {
+public class AbstractPost {
 
     @Id
     private String id;
+
+    @Field(type = FieldType.Keyword)
+    private String indexer;
+
+    @Field(type = FieldType.Keyword)
+    private String url;
 
     @Field(type = FieldType.Text)
     private String title;
@@ -28,6 +34,24 @@ public abstract class AbstractPost {
 
     public AbstractPost setId(String id) {
         this.id = id;
+        return this;
+    }
+
+    public String getIndexer() {
+        return indexer;
+    }
+
+    public AbstractPost setIndexer(String indexer) {
+        this.indexer = indexer;
+        return this;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public AbstractPost setUrl(String url) {
+        this.url = url;
         return this;
     }
 

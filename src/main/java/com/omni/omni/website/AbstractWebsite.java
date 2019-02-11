@@ -31,5 +31,4 @@ public abstract class AbstractWebsite<T extends AbstractPost> {
         return viewer;
     }
 
-
 }

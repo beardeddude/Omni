@@ -7,14 +7,20 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.util.List;
 
-@Document(indexName = "creigslist_channel", type = "channel")
-public class CreigslistChannel {
+@Document(indexName = "craigslist_category", type = "category")
+public class CraigslistCategory {
 
     @Id
     private String id;
 
     @Field(type = FieldType.Keyword)
     private String name;
+
+    @Field(type = FieldType.Keyword)
+    private String group;
+
+    @Field(type = FieldType.Keyword)
+    private String url;
 
     @Field(type = FieldType.Keyword)
     private List<String> supportedLocations;
@@ -24,7 +30,7 @@ public class CreigslistChannel {
         return id;
     }
 
-    public CreigslistChannel setId(String id) {
+    public CraigslistCategory setId(String id) {
         this.id = id;
         return this;
     }
@@ -33,8 +39,26 @@ public class CreigslistChannel {
         return name;
     }
 
-    public CreigslistChannel setName(String name) {
+    public CraigslistCategory setName(String name) {
         this.name = name;
+        return this;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public CraigslistCategory setGroup(String group) {
+        this.group = group;
+        return this;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public CraigslistCategory setUrl(String url) {
+        this.url = url;
         return this;
     }
 
@@ -42,7 +66,7 @@ public class CreigslistChannel {
         return supportedLocations;
     }
 
-    public CreigslistChannel setSupportedLocations(List<String> supportedLocations) {
+    public CraigslistCategory setSupportedLocations(List<String> supportedLocations) {
         this.supportedLocations = supportedLocations;
         return this;
     }
