@@ -3,7 +3,7 @@ package com.omni.omni.website.creigslist;
 import com.omni.omni.util.jsoup.SiblingMatcher;
 import com.omni.omni.website.creigslist.datamodel.CraigslistCategory;
 import com.omni.omni.website.creigslist.datamodel.CraigslistLocation;
-import com.omni.omni.website.creigslist.repository.CraigslistChannelRepository;
+import com.omni.omni.website.creigslist.repository.CraigslistCategoryRepository;
 import com.omni.omni.website.creigslist.repository.CraigslistLocationRepository;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -27,15 +27,15 @@ public class CraigslistSiteMap {
 
     private static final String SITES_PAGE = "https://www.craigslist.org/about/sites";
 
-    private final CraigslistChannelRepository craigslistChannelRepository;
+    private final CraigslistCategoryRepository craigslistCategoryRepository;
     private final CraigslistLocationRepository craigslistLocationRepository;
 
     private List<CraigslistLocation> locations;
     private List<CraigslistCategory> categories;
 
-    public CraigslistSiteMap(CraigslistChannelRepository craigslistChannelRepository, CraigslistLocationRepository craigslistLocationRepository) throws IOException {
+    public CraigslistSiteMap(CraigslistCategoryRepository craigslistCategoryRepository, CraigslistLocationRepository craigslistLocationRepository) throws IOException {
 
-        this.craigslistChannelRepository = craigslistChannelRepository;
+        this.craigslistCategoryRepository = craigslistCategoryRepository;
         this.craigslistLocationRepository = craigslistLocationRepository;
 
         if (craigslistLocationRepository.count() > 0) {
@@ -59,7 +59,7 @@ public class CraigslistSiteMap {
 
         LOGGER.debug("Parsing categories");
         categories = discoverCategories(locations);
-        categories.forEach((category -> craigslistChannelRepository.save(category)));
+        categories.forEach((category -> craigslistCategoryRepository.save(category)));
 
         LOGGER.info("Found {} locations and {} categories", locations.size(), categories.size());
     }

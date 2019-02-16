@@ -14,6 +14,9 @@ public class CraigslistPost extends AbstractPost {
     @Field(type = FieldType.Keyword)
     private String category;
 
+    @Field(type = FieldType.Float)
+    private Float price;
+
     public String getLocation() {
         return location;
     }
@@ -29,6 +32,15 @@ public class CraigslistPost extends AbstractPost {
 
     public CraigslistPost setCategory(String category) {
         this.category = category;
+        return this;
+    }
+
+    public Float getPrice() {
+        return price;
+    }
+
+    public CraigslistPost setPrice(Float price) {
+        this.price = price;
         return this;
     }
 }
