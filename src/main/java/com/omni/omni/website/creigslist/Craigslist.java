@@ -42,7 +42,9 @@ public class Craigslist extends AbstractWebsite<CraigslistPost> {
 
         CraigslistLocation location =  craigslistLocationRepository.findAll().iterator().next();
         CraigslistCategory category = craigslistCategoryRepository.findAll().iterator().next();
+        long time = System.currentTimeMillis();
         ((CraigslistIndexer)getIndexer()).indexBoard(location, category);
+        System.out.println("time: " + (System.currentTimeMillis() - time));
     }
 
 }

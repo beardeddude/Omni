@@ -1,5 +1,7 @@
 package com.omni.omni.website.creigslist;
 
+import com.google.common.collect.Lists;
+import com.omni.omni.util.elasticsearch.RepositoryUtils;
 import com.omni.omni.util.jsoup.SiblingMatcher;
 import com.omni.omni.website.creigslist.datamodel.CraigslistCategory;
 import com.omni.omni.website.creigslist.datamodel.CraigslistLocation;
@@ -47,6 +49,11 @@ public class CraigslistSiteMap {
 
     private void loadExistingConfiguration() {
 
+        // TODO this needs to be done with scroll and possibly need to limit data set (how much mem?)
+        locations = RepositoryUtils.getAll(craigslistLocationRepository);
+        categories = RepositoryUtils.getAll(craigslistCategoryRepository);
+
+        System.out.println("");
     }
 
     private void createNewConfiguration() throws IOException {
@@ -55,11 +62,11 @@ public class CraigslistSiteMap {
 
         LOGGER.debug("Parsing locations");
         locations = discoverLocations();
-        locations.stream().forEach((location)-> craigslistLocationRepository.save(location));
+        craigslistLocationRepository.saveAll(locations);
 
         LOGGER.debug("Parsing categories");
         categories = discoverCategories(locations);
-        categories.forEach((category -> craigslistCategoryRepository.save(category)));
+        craigslistCategoryRepository.saveAll(categories);
 
         LOGGER.info("Found {} locations and {} categories", locations.size(), categories.size());
     }
@@ -115,13 +122,15 @@ public class CraigslistSiteMap {
 
         for (CraigslistLocation location : locations) {
 
+            LOGGER.debug("Discovering categories for location: {}", location.getName());
             Document page = Jsoup.connect(location.getUrl()).get();
 
             // Find all category groups
             Elements groupNameElements = page.select("#center h4");
             for (Element groupNameElement : groupNameElements) {
 
-                String groupName = groupNameElement.ownText();
+                String groupName = groupNameElement.wholeText();
+                LOGGER.debug("Discovering categories for location: {}, group: {}", location.getName(), groupName);
 
                 // Find the list div in the next sibling elements
                 Element categoryHolderElement = SiblingMatcher.getNextMatchingSibling(groupNameElement, (element -> "cats".equalsIgnoreCase(element.className())));
@@ -130,18 +139,22 @@ public class CraigslistSiteMap {
                 Elements categoryElements = categoryHolderElement.select("ul li a");
                 for (Element categoryElement : categoryElements) {
 
-                    String url = categoryElement.attr("href");
+                    String url = categoryElement.attr("href").replace(location.getUrl(), "");
                     CraigslistCategory craigslistCategory = categoryMap.get(url);
                     if (craigslistCategory == null) {
                         craigslistCategory = new CraigslistCategory()
-                                .setName(categoryElement.ownText())
+                                .setName(categoryElement.wholeText())
                                 .setGroup(groupName)
                                 .setUrl(url)
                                 .setSupportedLocations(new ArrayList<>());
+
+                        categoryMap.put(url, craigslistCategory);
+                        categories.add(craigslistCategory);
                     }
                     craigslistCategory.getSupportedLocations().add(location.getUrl());
 
-                    categories.add(craigslistCategory);
+                    LOGGER.debug("Discovered category location: {}, group: {}, category: {}", location.getName(), groupName, craigslistCategory.getName());
+
                 }
             }
         }
