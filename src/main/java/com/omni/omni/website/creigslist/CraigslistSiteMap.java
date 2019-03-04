@@ -41,7 +41,7 @@ public class CraigslistSiteMap {
         this.craigslistLocationRepository = craigslistLocationRepository;
 
         if (craigslistLocationRepository.count() > 0) {
-            loadExistingConfiguration();
+            //loadExistingConfiguration();
         } else {
             createNewConfiguration();
         }
